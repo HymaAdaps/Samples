@@ -9,7 +9,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context arg0, Intent arg1) {
-        PlayVideoImageActivity activity = new PlayVideoImageActivity();
-        activity.playAtTime(arg1.getExtras());
+        if (arg1 != null) {
+            PlayVideoImageActivity activity = new PlayVideoImageActivity();
+            activity.playAtTime(arg1.getExtras());
+        }
     }
 }

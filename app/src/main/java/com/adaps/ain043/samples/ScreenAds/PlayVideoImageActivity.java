@@ -75,25 +75,26 @@ public class PlayVideoImageActivity extends AppCompatActivity implements PlayIma
 
     public void playAtTime(Bundle data) {
         //check video/image is playing
-        if (isImage) {
-            long totalTime = playImage.getTotalTime();
-            long curTime = playImage.getCurTime();
-            Log.e("Tag", "totalTime " + totalTime + " curTime " + curTime);
-        } else {// video
-            binding.videoView.pause();
-        }
-        //pause the current loop, start the special item to play
-        VideoImage videoImage = data.getParcelable("item");
-        Log.e("Tag", videoImage.contentType);
-        playSpclItem(videoImage);
+//        if (isImage && playImage != null) {
+//            long totalTime = playImage.getTotalTime();
+//            long curTime = playImage.getCurTime();
+//            Log.e("Tag", "totalTime " + totalTime + " curTime " + curTime);
+//        } else {// video
+//            if (binding.videoView.isPlaying())
+//                binding.videoView.pause();
+//        }
+//        //pause the current loop, start the special item to play
+//        VideoImage videoImage = data.getParcelable("item");
+//        Log.e("Tag", videoImage.contentType);
+//        playSpclItem(videoImage);
     }
 
     private void fixTimeFrameForSpclItems() {
         for (int i = 0; i < spclVideoImageList.size(); i++) {
             String[] time = spclVideoImageList.get(i).startAtTime.split(":");
             Calendar calSet = Calendar.getInstance();
-            calSet.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[2]));
-            calSet.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+            calSet.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[1]));
+            calSet.set(Calendar.MINUTE, Integer.parseInt(time[0]));
             calSet.set(Calendar.SECOND, 0);
             calSet.set(Calendar.MILLISECOND, 0);
 
@@ -110,7 +111,7 @@ public class PlayVideoImageActivity extends AppCompatActivity implements PlayIma
     private String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("json_image_video.json");
+            InputStream is = getResources().getAssets().open("temp_list.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

@@ -1,0 +1,96 @@
+{
+  "concierge": [
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5000",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "url": "http://kittentoob.com/wp-content/uploads/2012/04/cat-pics18.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5000",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "url": "http://www.wallpapers-web.com/data/out/59/4244328-cute-dog-boo-wallpapers.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5000",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "url": "http://kb4images.com/images/dogs-wallpapers/36873476-dogs-wallpapers.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5000",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "url": "http://kittentoob.com/wp-content/uploads/2012/04/cat-pics18.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5000",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "url": "http://slappedham.com/wp-content/uploads/2014/06/Fluffy-small-dog.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5000",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "url": "http://www.wallpaperbetter.com/wallpaper/204/11/585/cute-little-maltese-dog-laptop-backgrounds-720P-wallpaper-middle-size.jpg"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10000",
+      "startAtTime": "14:02",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    }
+  ]
+}

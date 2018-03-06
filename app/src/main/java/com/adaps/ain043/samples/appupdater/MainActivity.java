@@ -42,106 +42,108 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //comment
-        binding.included.dialogUpdateChangelog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        //.setUpdateFrom(UpdateFrom.GITHUB)
-                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
-                        .setUpdateFrom(UpdateFrom.JSON)
-                        .setUpdateJSON("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update-changelog.json")
-                        .setDisplay(Display.DIALOG)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
-        binding.included.dialogUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        //.setUpdateFrom(UpdateFrom.GITHUB)
-                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
-                        .setUpdateFrom(UpdateFrom.JSON)
-                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.json")
-                        .setDisplay(Display.DIALOG)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
-        binding.included.snackbarUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        //.setUpdateFrom(UpdateFrom.GITHUB)
-                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
-                        .setUpdateFrom(UpdateFrom.XML)
-                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.xml")
-                        .setDisplay(Display.SNACKBAR)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
-        binding.included.notificationUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        //.setUpdateFrom(UpdateFrom.GITHUB)
-                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
-                        .setUpdateFrom(UpdateFrom.XML)
-                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.xml")
-                        .setDisplay(Display.NOTIFICATION)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
-        binding.included.dialogNoUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                        .setDisplay(Display.DIALOG)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
-        binding.included.snackbarNoUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                        .setDisplay(Display.SNACKBAR)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
-        binding.included.notificationNoUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                        .setDisplay(Display.NOTIFICATION)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-        binding.settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        });
+//        binding.included.dialogUpdateChangelog.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        //.setUpdateFrom(UpdateFrom.GITHUB)
+//                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
+//                        .setUpdateFrom(UpdateFrom.JSON)
+//                        .setUpdateJSON("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update-changelog.json")
+//                        .setDisplay(Display.DIALOG)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//
+//        binding.included.dialogUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        //.setUpdateFrom(UpdateFrom.GITHUB)
+//                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
+//                        .setUpdateFrom(UpdateFrom.JSON)
+//                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.json")
+//                        .setDisplay(Display.DIALOG)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//
+//        binding.included.snackbarUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        //.setUpdateFrom(UpdateFrom.GITHUB)
+//                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
+//                        .setUpdateFrom(UpdateFrom.XML)
+//                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.xml")
+//                        .setDisplay(Display.SNACKBAR)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//
+//        binding.included.notificationUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        //.setUpdateFrom(UpdateFrom.GITHUB)
+//                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
+//                        .setUpdateFrom(UpdateFrom.XML)
+//                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.xml")
+//                        .setDisplay(Display.NOTIFICATION)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//
+//        binding.included.dialogNoUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+//                        .setDisplay(Display.DIALOG)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//
+//        binding.included.snackbarNoUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+//                        .setDisplay(Display.SNACKBAR)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//
+//        binding.included.notificationNoUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new AppUpdater(context)
+//                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+//                        .setDisplay(Display.NOTIFICATION)
+//                        .showAppUpdated(true)
+//                        .start();
+//            }
+//        });
+//        binding.settings.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+//            }
+//        });
     }
 
     private void checkForAppStoreUpdate() {
         AppUpdaterUtils appUpdaterUtils = new AppUpdaterUtils(this)
-                .setUpdateFrom(UpdateFrom.GITHUB)
-                .setGitHubUserAndRepo("HymaAdaps", "AppUpdate")
+//                .setUpdateFrom(UpdateFrom.GITHUB)
+//                .setGitHubUserAndRepo("HymaAdaps", "Samples")
+                .setUpdateFrom(UpdateFrom.JSON)
+                    .setUpdateXML("https://raw.githubusercontent.com/HymaAdaps/Samples/master/app/update.json")
                 .withListener(new AppUpdaterUtils.UpdateListener() {
                     @Override
                     public void onSuccess(Update update, Boolean isUpdateAvailable) {
