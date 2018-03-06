@@ -1,0 +1,96 @@
+{
+  "concierge": [
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "url": "http://kittentoob.com/wp-content/uploads/2012/04/cat-pics18.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "url": "http://kittentoob.com/wp-content/uploads/2012/04/cat-pics18.jpg"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Video",
+      "contentType": "video",
+      "tileId": "1",
+      "timeToDisplay": "5",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    },
+    {
+      "name": "First Image",
+      "contentType": "image",
+      "tileId": "2",
+      "timeToDisplay": "10",
+      "startAtTime": "14:02",
+      "url": "http://res.cloudinary.com/checkedincare/image/upload/v1490324051/sys/concierge.png"
+    }
+  ]
+}

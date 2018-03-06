@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Samples</string>
+
+    <string name="device_admin_not_enabled">Screen Off application was not marked as Device Administrator. Please check Security settings.</string>
+    <string name="device_admin_description">Turns the screen off and locks your device with a single touch.</string>
+    <string name="admin_receiver_status_enabled">Screen Off was added as Device Administrator</string>
+    <string name="admin_receiver_status_disabled">Screen Off was removed from Device Administrators list</string>
+
+    <string name="permission_camera_rationale">Sample application needs permission to use cameras</string>
+    <string name="permission_internet_rationale">Sample application needs permission to use the network</string>
+    <string name="permission_audiorecord_rationale">Sample application needs permission to use the microphone</string>
+    <string name="permission_audiosettings_rationale">Sample application needs permission to modify the audio settings</string>
+    <string name="permission_writeexternalstorage_rationale">Sample application needs permission to write to the SD card</string>
+    <string name="permission_camera_granted">Camera permission granted</string>
+    <string name="permission_internet_granted">Network permission granted</string>
+    <string name="permission_audiorecord_granted">Mircophone permission granted</string>
+    <string name="permission_audiosettings_granted">Audio settings permission granted</string>
+    <string name="permission_writeexternalstorage_granted">SD card permission granted</string>
+
+
+
+    <string name="app_description">A library that checks for your apps\' updates on Google Play, GitHub, Amazon or F-Droid.</string>
+    <string name="app_icon"><a href="https://plus.google.com/+AdrienZier">Sample icon designed by Adrien Zier.</a></string>
+    <string name="btn_dialog_update_changelog">Show dialog (JSON with changelog)</string>
+    <string name="btn_dialog_update">Show dialog (JSON)</string>
+    <string name="btn_snackbar_update">Show snackbar (XML)</string>
+    <string name="btn_notification_update">Show notification (XML)</string>
+    <string name="btn_dialog_google_play">Show dialog (Google Play)</string>
+    <string name="btn_snackbar_google_play">Show snackbar (Google Play)</string>
+    <string name="btn_notification_google_play">Show notification (Google Play)</string>
+
+    <string name="settings_check_for_updates">Check for updates</string>
+    <string name="settings_check_for_updates_summary">Check for new versions using AppUpdater library.</string>
+</resources>
