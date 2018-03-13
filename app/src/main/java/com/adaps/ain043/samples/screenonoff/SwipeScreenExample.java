@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.adaps.ain043.samples.R;
-import com.github.javiersantos.appupdater.AppUpdater;
+import com.adaps.ain043.samples.appupdater.AppUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +41,6 @@ public class SwipeScreenExample extends Activity implements GestureDetector.OnGe
     @Override
     protected void onResume() {
         super.onResume();
-        AppUpdater updater = new AppUpdater(this)
-                .setDisplay(com.github.javiersantos.appupdater.enums.Display.DIALOG)
-                .setCancelable(false);
-
-        updater.start();
     }
 
     @Override
