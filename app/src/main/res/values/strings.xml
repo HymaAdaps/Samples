@@ -159,7 +159,7 @@
 
     <!--chromecast-->
     <string name="video_url">xxxxx</string>
-    <string name="app_id">xxxxx</string>
+    <string name="app_id">794B7BBF</string>
     <string name="play_video">Play Video</string>
     <string name="pause_video">Pause Video</string>
     <string name="resume_video">Resume Video</string>

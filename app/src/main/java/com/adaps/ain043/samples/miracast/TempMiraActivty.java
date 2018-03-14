@@ -1,4 +1,4 @@
-package com.adaps.ain043.samples;
+package com.adaps.ain043.samples.miracast;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -8,9 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.adaps.ain043.samples.R;
 import com.adaps.ain043.samples.databinding.ActivityTempMiraBinding;
-import com.adaps.ain043.samples.miracast.utils.Alert;
 
 /**
  * Created by ain043 on 3/13/2018 at 11:38 AM
@@ -43,10 +44,9 @@ public class TempMiraActivty extends AppCompatActivity implements View.OnClickLi
                 try {
                     startActivity(new Intent("android.settings.CAST_SETTINGS"));
                 } catch (Exception e2) {
-                    Alert.toast(this, "Your device do not supported");
+                    Toast.makeText(this, "Your device do not supported", Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
-
 }
