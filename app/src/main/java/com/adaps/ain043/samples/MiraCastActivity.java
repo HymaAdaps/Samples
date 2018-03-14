@@ -26,8 +26,7 @@ public class MiraCastActivity extends Activity {
     private ListView mListView;
     private final SparseArray<RemotePresentation> mActivePresentations = new SparseArray<RemotePresentation>();
 //    private MediaRouteSelector mSelector;
-//    jan 10 hi anunnav call chestha annav y?
-//    feb 11 block chesa feb 19 call cehstha annav cheyle, feb20 pic enduku adigav?
+
 
     private final DisplayManager.DisplayListener mDisplayListener = new DisplayManager.DisplayListener() {
         @Override
@@ -148,3 +147,4 @@ public class MiraCastActivity extends Activity {
         }
     }
 }
+//http://www.binpress.com/tutorial/building-an-android-google-cast-sender-app/161 cromecast
