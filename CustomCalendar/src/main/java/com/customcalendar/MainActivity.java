@@ -10,9 +10,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.customcalendar.calenderlibrary.CompactCalendarView;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -47,16 +49,16 @@ import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity implements IParserListener<JsonElement> {
 
-    private AppBarLayout appBarLayout;
+//    private AppBarLayout appBarLayout;
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
-
+    private SimpleDateFormat selDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private CompactCalendarView compactCalendarView;
 
     private boolean isExpanded = false;
     private RecyclerView rvEvents;
+    private TextView tvNoData;
     private ImageView arrow;
-    private NestedScrollView nesScroll;
+    //    private NestedScrollView nesScroll;
     private List<SchedulerEvent> eventsList = new ArrayList<>();
     Calendar calendar = Calendar.getInstance();
     int month = calendar.get(Calendar.MONTH);
@@ -102,41 +104,31 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_calendar_temp);
 
         setTitle("CompactCalendarViewToolbar");
 
         rvEvents = findViewById(R.id.rvEvents);
-        nesScroll = findViewById(R.id.nesScroll);
-
-        appBarLayout = findViewById(R.id.app_bar_layout);
-        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-            @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-//                showHideCalendar();
-            }
-        });
-
-        // Set up the CompactCalendarView
+        tvNoData = findViewById(R.id.tvNoData);
         compactCalendarView = findViewById(R.id.compactcalendar_view);
 
         // Force English
-        compactCalendarView.setLocale(TimeZone.getDefault(), /*Locale.getDefault()*/Locale.ENGLISH);
+        compactCalendarView.setLocale(Locale.ENGLISH);
 
         compactCalendarView.setShouldDrawDaysHeader(true);
 
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                setSubtitle(dateFormat.format(dateClicked));
+                setSubtitle(selDateFormat.format(dateClicked));
+                getDayEvents(dateClicked);
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 currentSelMonth = firstDayOfNewMonth.getMonth();
-                setSubtitle(dateFormat.format(firstDayOfNewMonth));
+                setSubtitle(selDateFormat.format(firstDayOfNewMonth));
+                requestForCalender("");
             }
         });
 
@@ -153,41 +145,57 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
                 showHideCalendar();
             }
         });
-        nesScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        rvEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (v.getChildAt(v.getChildCount() - 1) != null) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                LinearLayoutManager layoutManager = ((LinearLayoutManager) rvEvents.getLayoutManager());
+                int lastPos = layoutManager.findLastVisibleItemPosition();
+                int comLastPos = layoutManager.findLastCompletelyVisibleItemPosition();
+                Log.e("Tag", lastPos + " , " + comLastPos);
+            }
+        });
+        Calendar calendar = Calendar.getInstance();
+        currentSelMonth = calendar.get(Calendar.MONTH);
+        Date date = new Date();
+        requestForCalender(selDateFormat.format(date));
+    }
 
-                    layoutManager = ((LinearLayoutManager) rvEvents.getLayoutManager());
-                    int visibleItemCount = layoutManager.findFirstVisibleItemPosition();
-                    int totalItemCount = layoutManager.findLastVisibleItemPosition();
+    private void getDayEvents(Date date) {
+        try {
+            List<SchedulerEvent> tempEventList = new ArrayList<>();
 
-                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-                            scrollY > oldScrollY) {
-                        visibleItemCount = layoutManager.getChildCount();
-                        totalItemCount = layoutManager.getItemCount();
-                        int pastVisiblesItems = layoutManager.findLastCompletelyVisibleItemPosition();
+            SimpleDateFormat spf = new SimpleDateFormat("MMM dd, yyyy");
+            String myDate = spf.format(date);
 
-                        Log.e("positios", " pastVisiblesItems " + pastVisiblesItems);
-//working call for another month change lable as well  it may not work
+            tempEventList.add(new SchedulerEvent(myDate));
+            for (int i = 0; i < eventsList.size(); i++) {
+                if (!TextUtils.isEmpty(eventsList.get(i).startdate)) {
+                    Date eventDate = selDateFormat.parse(eventsList.get(i).startdate);
+                    if (date.equals(eventDate)) {
+                        tempEventList.add(eventsList.get(i));
                     }
                 }
             }
-        });
-
-        Calendar calendar = Calendar.getInstance();
-        currentSelMonth = calendar.get(Calendar.MONTH);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        requestForCalender(formatter.format(date));
+            if (tempEventList != null && tempEventList.size() > 1) {
+                calendarAdapter.addItems(tempEventList);
+                tvNoData.setVisibility(View.GONE);
+                rvEvents.setVisibility(View.VISIBLE);
+            } else {
+                tvNoData.setVisibility(View.VISIBLE);
+                rvEvents.setVisibility(View.GONE);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showHideCalendar() {
-        float rotation = isExpanded ? 0 : 180;
-        ViewCompat.animate(arrow).rotation(rotation).start();
-
-        isExpanded = !isExpanded;
-        appBarLayout.setExpanded(isExpanded, true);
+//        float rotation = isExpanded ? 0 : 180;
+//        ViewCompat.animate(arrow).rotation(rotation).start();
+//
+//        isExpanded = !isExpanded;
+//        appBarLayout.setExpanded(isExpanded, true);
     }
 
     private void setAdapter() {
@@ -214,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
 
     private void formateMonthEvents() {
         Calendar calendar = Calendar.getInstance();
-        String monthName = monthNameArray[currentSelMonth - 1];
+        String monthName = monthNameArray[currentSelMonth];
         List<SchedulerEvent> tempEventList = new ArrayList<>();
         int first = 0, last = first + 7;
         int daysInMonth = getNoOfDaysOfMonth();
@@ -285,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
     }
 
     private void setCurrentDate(Date date) {
-        setSubtitle(dateFormat.format(date));
+        setSubtitle(selDateFormat.format(date));
         if (compactCalendarView != null) {
             compactCalendarView.setCurrentDate(date);
         }
@@ -336,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
     }
 
     public void requestForCalender(String startDate) {
-        parseCalenderPros(loadJSONFromAsset());
+        parseCalenderPros(loadJSONFromAsset(currentSelMonth));
 //        CommonUtils.showLoadingDialog(this);
 //        Call<JsonElement> call = CalendarApplication.getWsClientListener().getCalendarPro(userId, siteId, startDate);
 //        new WSUtils().requestForJsonObject(this, WSUtils.REQ_GET_CALENDER_PRO, call, this);
@@ -352,10 +360,17 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         }
     }
 
-    public String loadJSONFromAsset() {
+    public String loadJSONFromAsset(int month) {
         String json = null;
         try {
-            InputStream is = getAssets().open("events.json");
+            InputStream is;
+            if (month == 3) {
+                is = getAssets().open("events.json");
+            } else if (month < 3) {
+                is = getAssets().open("events_mar.json");
+            } else {
+                is = getAssets().open("events_may.json");
+            }
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
