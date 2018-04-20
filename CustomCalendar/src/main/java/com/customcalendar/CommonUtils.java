@@ -49,4 +49,50 @@ public class CommonUtils {
         NetworkInfo _activeNetwork = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
         return _activeNetwork != null && _activeNetwork.isConnectedOrConnecting();
     }
+
+    public static int getNoOfDaysOfMonth(int month, int year) {
+        switch (month % 2) {
+            case 1:
+                return 31;
+            case 0:
+                if (month == 2) {
+                    if (year % 4 == 0) {
+                        return 29;
+                    } else {
+                        return 28;
+                    }
+                } else {
+                    return 30;
+                }
+        }
+        return 0;
+    }
+
+    public static String getDayName(int i) {
+        String day = "";
+        switch (i) {
+            case 1:
+                day = "Sun";
+                break;
+            case 2:
+                day = "Mon";
+                break;
+            case 3:
+                day = "Tue";
+                break;
+            case 4:
+                day = "Wed";
+                break;
+            case 5:
+                day = "Thu";
+                break;
+            case 6:
+                day = "Fri";
+                break;
+            case 7:
+                day = "Sat";
+                break;
+        }
+        return day;
+    }
 }

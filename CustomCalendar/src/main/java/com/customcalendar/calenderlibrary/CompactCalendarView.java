@@ -19,7 +19,6 @@ import java.util.Locale;
 
 public class CompactCalendarView extends View {
 
-    private final AnimationHandler animationHandler;
     private CompactCalendarController compactCalendarController;
     private GestureDetectorCompat gestureDetector;
     private boolean shouldScroll = true;
@@ -77,7 +76,6 @@ public class CompactCalendarView extends View {
                 Color.argb(255, 64, 64, 64), Color.argb(255, 219, 219, 219), VelocityTracker.obtain(),
                 Color.argb(255, 100, 68, 65));
         gestureDetector = new GestureDetectorCompat(getContext(), gestureListener);
-        animationHandler = new AnimationHandler(compactCalendarController, this);
     }
 
     /*
@@ -266,22 +264,18 @@ public class CompactCalendarView extends View {
 
     public void showCalendar() {
         checkTargetHeight();
-        animationHandler.openCalendar();
     }
 
     public void hideCalendar() {
         checkTargetHeight();
-        animationHandler.closeCalendar();
     }
 
     public void showCalendarWithAnimation() {
         checkTargetHeight();
-        animationHandler.openCalendarWithAnimation();
     }
 
     public void hideCalendarWithAnimation() {
         checkTargetHeight();
-        animationHandler.closeCalendarWithAnimation();
     }
 
     public void showNextMonth() {

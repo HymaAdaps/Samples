@@ -5,9 +5,9 @@
       "name": "Trip to Shops",
       "description": "Grocery shopping and Coffee",
       "startdate": "2018-04-06",
-      "enddate": "2018-04-06",
-      "starttime": "09:30",
-      "endtime": "11:30",
+      "enddate": "2018-04-07",
+      "starttime": "05:45",
+      "endtime": "9:50",
       "color": "#ff6f69",
       "imgurl": "http://res.cloudinary.com/checkedincare/image/upload/v1495601073/scheduler/shopping.png",
       "taskurl": "",
@@ -25,7 +25,31 @@
       "entrysourceeditable": false
     },
     {
-      "id": 5,
+      "id": 2,
+      "name": "Multi event",
+      "description": "Grocery shopping and Coffee",
+      "startdate": "2018-04-06",
+      "enddate": "2018-04-08",
+      "starttime": "09:30",
+      "endtime": "11:30",
+      "color": "#ff6f69",
+      "imgurl": "http://res.cloudinary.com/checkedincare/image/upload/v1495601281/scheduler/carer.png",
+      "taskurl": "",
+      "url": "",
+      "image": "",
+      "tasktype": false,
+      "residentid": "C1D76407-A7FE-4F2F-BAEE-A21C153C779C",
+      "siteid": 0,
+      "recursive": false,
+      "status": true,
+      "entrysourceclientid": "0",
+      "entrysourceid": "",
+      "entrysource": "",
+      "entrysourceurl": "",
+      "entrysourceeditable": false
+    },
+    {
+      "id": 3,
       "name": "Visit from Carer",
       "description": "Regular visit from Ms. Leena",
       "startdate": "2018-04-11",
@@ -49,7 +73,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 7,
+      "id": 4,
       "name": "Visit from Carer",
       "description": "Regular visit from Ms. Leena",
       "startdate": "2018-04-22",
@@ -73,7 +97,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 23,
+      "id": 5,
       "name": "Evening Tea",
       "description": "Evening Tea in community hall",
       "startdate": "2018-04-25",
@@ -97,7 +121,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 24,
+      "id": 6,
       "name": "Local trip",
       "description": "shops Local Trip to local ",
       "startdate": "2018-04-27",
@@ -121,7 +145,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 7,
       "name": "Hot tea of bag",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-27",
@@ -145,7 +169,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 8,
       "name": "Copy",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-18",
@@ -169,7 +193,55 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 9,
+      "name": "Test event on current day",
+      "description": "Grocery shopping and Coffee",
+      "startdate": "2018-04-20",
+      "enddate": "2018-04-20",
+      "starttime": "09:30",
+      "endtime": "11:30",
+      "color": "#ff6f69",
+      "imgurl": "http://res.cloudinary.com/checkedincare/image/upload/v1495601073/scheduler/shopping.png",
+      "taskurl": "",
+      "url": "",
+      "image": "",
+      "tasktype": false,
+      "residentid": "C1D76407-A7FE-4F2F-BAEE-A21C153C779C",
+      "siteid": 0,
+      "recursive": false,
+      "status": true,
+      "entrysourceclientid": "0",
+      "entrysourceid": "",
+      "entrysource": "",
+      "entrysourceurl": "",
+      "entrysourceeditable": false
+    },
+    {
+      "id": 10,
+      "name": "I'm not fine",
+      "description": "Grocery shopping and Coffee",
+      "startdate": "2018-04-19",
+      "enddate": "2018-04-19",
+      "starttime": "09:30",
+      "endtime": "11:30",
+      "color": "#ff6f69",
+      "imgurl": "http://res.cloudinary.com/checkedincare/image/upload/v1495601073/scheduler/shopping.png",
+      "taskurl": "",
+      "url": "",
+      "image": "",
+      "tasktype": false,
+      "residentid": "C1D76407-A7FE-4F2F-BAEE-A21C153C779C",
+      "siteid": 0,
+      "recursive": false,
+      "status": true,
+      "entrysourceclientid": "0",
+      "entrysourceid": "",
+      "entrysource": "",
+      "entrysourceurl": "",
+      "entrysourceeditable": false
+    },
+    {
+      "id": 11,
       "name": "Duumy Text 1",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-19",
@@ -193,7 +265,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 12,
       "name": "Duumy Text 2",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-22",
@@ -217,7 +289,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 13,
       "name": "Duumy Text 3",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-05",
@@ -241,7 +313,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 14,
       "name": "Duumy Text 4",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-10",
@@ -265,7 +337,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 25,
+      "id": 15,
       "name": "Duumy Text 5",
       "description": "A custom title trip to local shops",
       "startdate": "2018-04-19",
@@ -289,7 +361,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 26,
+      "id": 16,
       "name": "Shopping trip",
       "description": "Shopping trip to local shops",
       "startdate": "2018-04-30",
@@ -313,7 +385,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 6,
+      "id": 17,
       "name": "Visit from Carer",
       "description": "Regular visit from Ms. Leena",
       "startdate": "2018-04-18",
@@ -337,7 +409,7 @@
       "entrysourceeditable": false
     },
     {
-      "id": 27,
+      "id": 18,
       "name": "Visit to park",
       "description": "Visit to local park",
       "startdate": "2018-04-30",
