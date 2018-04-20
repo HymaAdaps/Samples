@@ -170,8 +170,11 @@ class CompactCalendarController {
             multiDayIndicatorStrokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, dm);
         }
 
-        yIndicatorOffset = 8 * screenDensity;
-        xIndicatorOffset = 3.5f * screenDensity;
+//        yIndicatorOffset = 8 * screenDensity;
+//        xIndicatorOffset = 3.5f * screenDensity;
+
+        yIndicatorOffset = 3 * screenDensity;
+        xIndicatorOffset = 1.5f * screenDensity;
 
         //scale small indicator by screen density
         smallIndicatorRadius = 2.5f * screenDensity;
@@ -334,7 +337,8 @@ class CompactCalendarController {
         double y1 = 0.5 * Math.sqrt((x1 * x1) + (x1 * x1));
         double y0 = 0.5 * Math.sqrt((x0 * x0) + (x0 * x0));
 
-        return (float) (y0 + ((y1 - y0) * ((x - x0) / (x1 - x0))));
+//        return (float) (y0 + ((y1 - y0) * ((x - x0) / (x1 - x0))));
+        return (float) 45;
     }
 
     void onDraw(Canvas canvas) {
@@ -767,14 +771,14 @@ class CompactCalendarController {
 
     private void drawSingleEvent(Canvas canvas, float xPosition, float yPosition, List<Event> eventsList) {
         Event event = eventsList.get(0);
-        drawSmallIndicatorCircle(canvas, xPosition, yPosition + yIndicatorOffset, event.getColor());
+        drawSmallIndicatorCircle(canvas, xPosition, yPosition + yIndicatorOffset+6, event.getColor());
     }
 
     private void drawTwoEvents(Canvas canvas, float xPosition, float yPosition, List<Event> eventsList) {
         //draw fist event just left of center
-        drawSmallIndicatorCircle(canvas, xPosition + (xIndicatorOffset * -1), yPosition + yIndicatorOffset, eventsList.get(0).getColor());
+        drawSmallIndicatorCircle(canvas, xPosition + (xIndicatorOffset * -1), yPosition + yIndicatorOffset + 6, eventsList.get(0).getColor());
         //draw second event just right of center
-        drawSmallIndicatorCircle(canvas, xPosition + (xIndicatorOffset * 1), yPosition + yIndicatorOffset, eventsList.get(1).getColor());
+        drawSmallIndicatorCircle(canvas, xPosition + (xIndicatorOffset * 1) + 6, yPosition + yIndicatorOffset + 6, eventsList.get(1).getColor());
     }
 
     //draw 2 eventsByMonthAndYearMap followed by plus indicator to show there are more than 2 eventsByMonthAndYearMap
@@ -868,10 +872,10 @@ class CompactCalendarController {
     private void drawCircle(Canvas canvas, float x, float y, int color) {
         dayPaint.setColor(color);
         if (animationStatus == ANIMATE_INDICATORS) {
-            float maxRadius = bigCircleIndicatorRadius * 1.4f;
-            drawCircle(canvas, growfactorIndicator > maxRadius ? maxRadius : growfactorIndicator, x, y - (textHeight / 6));
+            float maxRadius = bigCircleIndicatorRadius * 0.5f;
+            drawCircle(canvas, growfactorIndicator > maxRadius ? maxRadius : growfactorIndicator, x, y - (textHeight / 4));
         } else {
-            drawCircle(canvas, bigCircleIndicatorRadius, x, y - (textHeight / 6));
+            drawCircle(canvas, bigCircleIndicatorRadius, x, y - (textHeight / 4));
         }
     }
 
