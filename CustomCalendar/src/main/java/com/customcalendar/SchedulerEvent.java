@@ -85,21 +85,23 @@ public class SchedulerEvent {
         this.type = 3;
     }
 
-    @Override
-    public boolean equals(Object v) {
-        boolean retVal = false;
-
-        if (v instanceof SchedulerEvent) {
-            SchedulerEvent ptr = (SchedulerEvent) v;
-            retVal = ptr.id.longValue() == this.id;
-        }
-        return retVal;
+    SchedulerEvent() {
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + (this.id != null ? this.id.hashCode() : 0);
-        return hash;
-    }
+//    @Override
+//    public boolean equals(Object v) {
+//        boolean retVal = false;
+//
+//        if (v instanceof SchedulerEvent) {
+//            SchedulerEvent ptr = (SchedulerEvent) v;
+//            retVal = ptr.id.longValue() == this.id;
+//        }
+//        return retVal;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 17 * hash + (this.id != null ? this.id.hashCode() : 0);
+//        return hash;
+//    }
 }

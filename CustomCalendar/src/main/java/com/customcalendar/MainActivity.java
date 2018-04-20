@@ -1,5 +1,6 @@
 package com.customcalendar;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -15,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.customcalendar.calenderlibrary.CompactCalendarView;
+import com.customcalendar.calenderlibrary.Event;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -37,6 +40,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -57,56 +61,24 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
     private boolean isExpanded = false;
     private RecyclerView rvEvents;
     private TextView tvNoData;
-    private ImageView arrow;
     //    private NestedScrollView nesScroll;
     private List<SchedulerEvent> eventsList = new ArrayList<>();
     Calendar calendar = Calendar.getInstance();
-    int month = calendar.get(Calendar.MONTH);
+    int month = calendar.get(Calendar.MONTH) + 1;
     int year = calendar.get(Calendar.YEAR);
-    private int TYPE_PRIMARY = 1;
-    private int TYPE_SECONDARY = 2;
-    private int TYPE_THRICEARY = 3;
     private String userId = "C1D76407-A7FE-4F2F-BAEE-A21C153C779C";
     private String siteId = "2";
     private int currentSelMonth, currentSelYear;
     private CalendarAdapter calendarAdapter;
     private LinearLayoutManager layoutManager;
-
-    public enum State {
-        EXPANDED,
-        COLLAPSED,
-    }
-
-    public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
-
-
-        private State mCurrentState = State.EXPANDED;
-
-        @Override
-        public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-            if (i == 0) {
-                if (mCurrentState != State.EXPANDED) {
-                    onStateChanged(appBarLayout, State.EXPANDED);
-                }
-                mCurrentState = State.EXPANDED;
-            } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
-                if (mCurrentState != State.COLLAPSED) {
-                    onStateChanged(appBarLayout, State.COLLAPSED);
-                }
-                mCurrentState = State.COLLAPSED;
-            }
-        }
-
-        public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
-    }
+    private String[] monthNameArray = {"January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"};
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_temp);
-
-        setTitle("CompactCalendarViewToolbar");
 
         rvEvents = findViewById(R.id.rvEvents);
         tvNoData = findViewById(R.id.tvNoData);
@@ -135,16 +107,6 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         // Set current date to today
         setCurrentDate(new Date());
 
-        arrow = findViewById(R.id.date_picker_arrow);
-
-        RelativeLayout datePickerButton = findViewById(R.id.date_picker_button);
-
-        datePickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showHideCalendar();
-            }
-        });
         rvEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -190,24 +152,16 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         }
     }
 
-    private void showHideCalendar() {
-//        float rotation = isExpanded ? 0 : 180;
-//        ViewCompat.animate(arrow).rotation(rotation).start();
-//
-//        isExpanded = !isExpanded;
-//        appBarLayout.setExpanded(isExpanded, true);
-    }
-
     private void setAdapter() {
 //        getDummyData();
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setNestedScrollingEnabled(false);
         calendarAdapter = new CalendarAdapter(this);
         rvEvents.setAdapter(calendarAdapter);
-        sortDataByDate();
+        sortDataByDate(eventsList);
     }
 
-    private void sortDataByDate() {
+    private void sortDataByDate(List<SchedulerEvent> eventsList) {
         Collections.sort(eventsList, new Comparator<SchedulerEvent>() {
             @Override
             public int compare(SchedulerEvent o1, SchedulerEvent o2) {
@@ -217,21 +171,48 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         formateMonthEvents();
     }
 
-    String[] monthNameArray = {"January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November", "December"};
 
     private void formateMonthEvents() {
-        Calendar calendar = Calendar.getInstance();
-        String monthName = monthNameArray[currentSelMonth];
         List<SchedulerEvent> tempEventList = new ArrayList<>();
-        int first = 0, last = first + 7;
-        int daysInMonth = getNoOfDaysOfMonth();
         int prevDay = 0, curDay = 0;
-        String curDate = monthName + " " + first + " - " + monthName + " " + last;
-        tempEventList.add(new SchedulerEvent(curDate));
         for (int i = 0; i < eventsList.size(); i++) {
             curDay = Integer.parseInt(eventsList.get(i).startdate.substring(eventsList.get(i).startdate.lastIndexOf("-") + 1, eventsList.get(i).startdate.length()));
-            if (curDay <= last) {
+            int endDay = Integer.parseInt(eventsList.get(i).enddate.substring(eventsList.get(i).enddate.lastIndexOf("-") + 1, eventsList.get(i).enddate.length()));
+            Log.e("TAg", " curDay " + curDay + " endDay " + endDay);
+            if (curDay != endDay) {
+                int loopCount = endDay - curDay + 1;
+                String savEndTime = eventsList.get(i).endtime;
+                String savName = eventsList.get(i).name;
+                eventsList.get(i).type = 1;
+                eventsList.get(i).endtime = "";
+                eventsList.get(i).name = savName + "(day1/" + loopCount + ")";
+                tempEventList.add(eventsList.get(i));
+                prevDay = curDay;
+                for (int j = 1; j <= endDay - curDay; j++) {
+                    SchedulerEvent schedulerEvent = new SchedulerEvent();
+                    if (j < endDay - curDay) {
+                        schedulerEvent.id = eventsList.get(i).id;
+                        int day = curDay + j;
+                        schedulerEvent.type = 1;
+                        int dayCount = j + 1;
+                        schedulerEvent.name = savName + "(day" + dayCount + "/" + loopCount + ")";
+                        schedulerEvent.timeInMillis = milliseconds(year + "-" + month + "-" + day);
+                        schedulerEvent.imgurl = eventsList.get(i).imgurl;
+                        tempEventList.add(schedulerEvent);
+                    } else {//multi event is end
+                        schedulerEvent.id = eventsList.get(i).id;
+                        int day = curDay + j;
+                        schedulerEvent.type = 1;
+                        int dayCount = j + 1;
+                        schedulerEvent.endtime = "Untill " + savEndTime;
+                        schedulerEvent.name = savName + "(day" + dayCount + "/" + loopCount + ")";
+                        schedulerEvent.imgurl = eventsList.get(i).imgurl;
+                        schedulerEvent.timeInMillis = milliseconds(year + "-" + month + "-" + day);
+                        tempEventList.add(schedulerEvent);
+                    }
+
+                }
+            } else if (prevDay != curDay) {
                 if (prevDay != curDay) {
                     eventsList.get(i).type = 1;
                 } else {
@@ -239,58 +220,45 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
                 }
                 tempEventList.add(eventsList.get(i));
                 prevDay = curDay;
+            }
+        }
+        Collections.sort(tempEventList, new Comparator<SchedulerEvent>() {
+            @Override
+            public int compare(SchedulerEvent o1, SchedulerEvent o2) {
+                return Long.compare(o1.timeInMillis, o2.timeInMillis);
+            }
+        });
+        eventsList.clear();
+        eventsList.addAll(tempEventList);
+        addHeaders(tempEventList);
+        calendarAdapter.addItems(tempEventList);
+        addEventsDot();
+    }
+
+    private void addHeaders(List<SchedulerEvent> tempEventList) {
+        String monthName = monthNameArray[currentSelMonth];
+        int first = 0, last = first + 7;
+        int daysInMonth = CommonUtils.getNoOfDaysOfMonth(month, year);
+        int curDay = 0;
+        String curDate = monthName + " " + first + " - " + monthName + " " + last;
+        tempEventList.add(0, new SchedulerEvent(curDate));
+        for (int i = 0; i < tempEventList.size(); i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(tempEventList.get(i).timeInMillis);
+            curDay = calendar.get(Calendar.DATE);
+            if (curDay <= last) {
+                //do nothing
             } else {
                 first = last + 1;
                 last = first + 7;
                 if (last > daysInMonth)
                     last = daysInMonth;
                 curDate = monthName + " " + first + " - " + monthName + " " + last;
-                tempEventList.add(new SchedulerEvent(curDate));
-
-                eventsList.get(i).type = 1;//else one loop items gets wasted
-                tempEventList.add(eventsList.get(i));
-                prevDay = curDay;
+                tempEventList.add(i, new SchedulerEvent(curDate));
             }
         }
-        calendarAdapter.addItems(tempEventList);
     }
 
-    private void getDummyData() {
-
-        Calendar currCal = Calendar.getInstance();
-        for (int i = 0; i < getNoOfDaysOfMonth(); i++) {
-            Events events = new Events();
-            currCal.set(year, month, i);
-            events.timeInMillis = currCal.getTimeInMillis();
-            events.title = "Event at 3" + String.valueOf(i);
-            if (i % 3 == 0) {
-                events.type = TYPE_PRIMARY;
-            } else if (i % 3 == 1) {
-                events.type = TYPE_SECONDARY;
-            } else if (i % 3 == 2) {
-                events.type = TYPE_THRICEARY;
-            }
-//            eventsList.add(events);
-        }
-    }
-
-    private int getNoOfDaysOfMonth() {
-        switch (month % 2) {
-            case 1:
-                return 31;
-            case 0:
-                if (month == 2) {
-                    if (year % 4 == 0) {
-                        return 29;
-                    } else {
-                        return 28;
-                    }
-                } else {
-                    return 30;
-                }
-        }
-        return 0;
-    }
 
     private void setCurrentDate(Date date) {
         setSubtitle(selDateFormat.format(date));
@@ -434,4 +402,38 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
     public void noInternetConnection(int requestCode) {
 
     }
+
+    private void addEventsDot() {
+        compactCalendarView.removeAllEvents();
+        for (int i = 0; i < eventsList.size()/*calendarAdapter.getItemCount()*/; i++) {
+            if (eventsList.get(i).timeInMillis > 0) {
+                compactCalendarView.addEvent(new Event(Color.argb(255, 169, 68, 65), eventsList.get(i).timeInMillis,
+                        "Event at " + new Date(eventsList.get(i).timeInMillis)), true);
+//                compactCalendarView.addEvents(Arrays.asList(new Event(Color.argb(255, 169, 68, 65), eventsList.get(i).timeInMillis,
+//                        "Event at " + new Date(eventsList.get(i).timeInMillis))));
+            }
+        }
+    }
+//for now removing 3rd type
+//            if (curDay <= last) {
+//        if (prevDay != curDay) {
+//            eventsList.get(i).type = 1;
+//        } else {
+//            eventsList.get(i).type = 2;
+//        }
+//        tempEventList.add(eventsList.get(i));
+//        prevDay = curDay;
+//    } else {
+//        first = last + 1;
+//        last = first + 7;
+//        if (last > daysInMonth)
+//            last = daysInMonth;
+//        curDate = monthName + " " + first + " - " + monthName + " " + last;
+//        tempEventList.add(new SchedulerEvent(curDate));
+//
+//        eventsList.get(i).type = 1;//else one loop items gets wasted
+//        tempEventList.add(eventsList.get(i));
+//        prevDay = curDay;
+//    }
+
 }

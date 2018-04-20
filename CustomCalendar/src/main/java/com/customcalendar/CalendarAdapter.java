@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(events.timeInMillis);
         int date = calendar.get(Calendar.DATE);
-        String day = getDayName(calendar.get(Calendar.DAY_OF_WEEK));
+        String day = CommonUtils.getDayName(calendar.get(Calendar.DAY_OF_WEEK));
         switch (events.type) {
             case 1:
                 CalendarVH1 calendarVH1 = (CalendarVH1) holder;
@@ -72,7 +73,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                Random rnd = new Random();
 //                drawable.setColor(Color.argb(255, 126, 126, 126));
                 calendarVH1.tvStartTime.setText(events.starttime);
-                calendarVH1.tvEndTime.setText(" - " + events.endtime);
+                if (!TextUtils.isEmpty(events.endtime))
+                    calendarVH1.tvEndTime.setText(events.endtime.contains("Untill") ? events.endtime : " - " + events.endtime);
+                calendarVH1.tvStartTime.setVisibility(!TextUtils.isEmpty(events.starttime) ? View.VISIBLE : View.GONE);
+                calendarVH1.tvEndTime.setVisibility(!TextUtils.isEmpty(events.endtime) ? View.VISIBLE : View.GONE);
                 Glide.with(context).load(events.imgurl).into(calendarVH1.ivEvent);
                 break;
             case 2:
@@ -93,33 +97,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private String getDayName(int i) {
-        String day = "";
-        switch (i) {
-            case 1:
-                day = "Sun";
-                break;
-            case 2:
-                day = "Mon";
-                break;
-            case 3:
-                day = "Tue";
-                break;
-            case 4:
-                day = "Wed";
-                break;
-            case 5:
-                day = "Thu";
-                break;
-            case 6:
-                day = "Fri";
-                break;
-            case 7:
-                day = "Sat";
-                break;
-        }
-        return day;
-    }
 
     @Override
     public int getItemCount() {
