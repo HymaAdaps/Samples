@@ -1,15 +1,28 @@
 package com.customcalendar;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,17 +65,12 @@ import java.util.TimeZone;
 import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity implements IParserListener<JsonElement> {
-
-//    private AppBarLayout appBarLayout;
-
     private SimpleDateFormat selDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private CompactCalendarView compactCalendarView;
 
-    private boolean isExpanded = false;
     private RecyclerView rvEvents;
     private TextView tvNoData;
-    //    private NestedScrollView nesScroll;
-    private List<SchedulerEvent> eventsList = new ArrayList<>();
+    private List<SchedulerEvent> eventsList, eventsMainList;
     Calendar calendar = Calendar.getInstance();
     int month = calendar.get(Calendar.MONTH) + 1;
     int year = calendar.get(Calendar.YEAR);
@@ -121,6 +129,31 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         currentSelMonth = calendar.get(Calendar.MONTH);
         Date date = new Date();
         requestForCalender(selDateFormat.format(date));
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey("id")) {
+            int id = bundle.getInt("id");
+            String title = bundle.getString("title");
+            String message = bundle.getString("message");
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.create().show();
+        } else {
+//            requestForCalender(selDateFormat.format(date));
+        }
     }
 
     private void getDayEvents(Date date) {
@@ -171,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         formateMonthEvents();
     }
 
+    private int prevDate = 0;
 
     private void formateMonthEvents() {
         List<SchedulerEvent> tempEventList = new ArrayList<>();
@@ -289,28 +323,6 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void requestForCalender(String startDate) {
         parseCalenderPros(loadJSONFromAsset(currentSelMonth));
 //        CommonUtils.showLoadingDialog(this);
@@ -353,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
 
     private void parseCalenderPros(String response) {
         eventsList = new ArrayList<>();
+        eventsMainList = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
             JSONArray array = jsonObject.getJSONArray("items");
@@ -367,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
                 event.timeInMillis = milliseconds(event.startdate);
                 eventsList.add(event);
             }
+            eventsMainList.addAll(eventsList);
 //            setCalenderItems();
             setAdapter();
         } catch (JSONException e) {
@@ -405,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
 
     private void addEventsDot() {
         compactCalendarView.removeAllEvents();
-        for (int i = 0; i < eventsList.size()/*calendarAdapter.getItemCount()*/; i++) {
+        for (int i = 0; i < eventsList.size(); i++) {
             if (eventsList.get(i).timeInMillis > 0) {
                 compactCalendarView.addEvent(new Event(Color.argb(255, 169, 68, 65), eventsList.get(i).timeInMillis,
                         "Event at " + new Date(eventsList.get(i).timeInMillis)), true);
@@ -413,27 +427,62 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
 //                        "Event at " + new Date(eventsList.get(i).timeInMillis))));
             }
         }
+        for (int i = 0; i < eventsMainList.size(); i++) {
+            setReminder(this, eventsMainList.get(i).starttime, eventsMainList.get(i).id, eventsMainList.get(i).name, eventsMainList.get(i).description);
+        }
     }
-//for now removing 3rd type
-//            if (curDay <= last) {
-//        if (prevDay != curDay) {
-//            eventsList.get(i).type = 1;
-//        } else {
-//            eventsList.get(i).type = 2;
-//        }
-//        tempEventList.add(eventsList.get(i));
-//        prevDay = curDay;
-//    } else {
-//        first = last + 1;
-//        last = first + 7;
-//        if (last > daysInMonth)
-//            last = daysInMonth;
-//        curDate = monthName + " " + first + " - " + monthName + " " + last;
-//        tempEventList.add(new SchedulerEvent(curDate));
-//
-//        eventsList.get(i).type = 1;//else one loop items gets wasted
-//        tempEventList.add(eventsList.get(i));
-//        prevDay = curDay;
-//    }
 
+    public void setReminder(Context context, String time, int id, String title, String message) {
+        String[] separated = time.split(":");
+        int hour = Integer.parseInt(separated[0]);
+        int min = Integer.parseInt(separated[1]);
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar setcalendar = Calendar.getInstance();
+        setcalendar.set(Calendar.HOUR_OF_DAY, hour);
+        setcalendar.set(Calendar.MINUTE, min);
+        setcalendar.set(Calendar.SECOND, 0);
+        // cancel already scheduled reminders
+        cancelReminder(context, AlarmReceiver.class, id);
+
+        if (setcalendar.before(calendar))
+            setcalendar.add(Calendar.DATE, 1);
+        long timeDelay = setcalendar.getTimeInMillis() - (5 * 60 * 1000);
+//        int timeDelay = (int) (setcalendar.getTimeInMillis() - (5 * 60 * 1000));
+        Log.e("mils", timeDelay + "");
+
+        // Enable a receiver
+        ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        bundle.putString("title", title);
+        bundle.putString("message", message);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtras(bundle);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        am.setExact(AlarmManager.RTC_WAKEUP, timeDelay, pendingIntent);
+    }
+
+    public void cancelReminder(Context context, Class<?> cls, int id) {
+        // Disable a receiver
+        ComponentName receiver = new ComponentName(context, cls);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        Intent intent1 = new Intent(context, cls);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                id, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        am.cancel(pendingIntent);
+        pendingIntent.cancel();
+    }
 }

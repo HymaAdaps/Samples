@@ -62,6 +62,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         calendar.setTimeInMillis(events.timeInMillis);
         int date = calendar.get(Calendar.DATE);
         String day = CommonUtils.getDayName(calendar.get(Calendar.DAY_OF_WEEK));
+
         switch (events.type) {
             case 1:
                 CalendarVH1 calendarVH1 = (CalendarVH1) holder;
