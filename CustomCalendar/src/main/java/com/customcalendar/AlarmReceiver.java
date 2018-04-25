@@ -31,13 +31,13 @@ public class AlarmReceiver extends BroadcastReceiver {
             int id = bundle.getInt("id");
             String title = bundle.getString("title");
             String message = bundle.getString("message");
-            if (foregrounded()) {//foreground without lock
-                Intent intent1 = new Intent(context, MainActivity.class);
-                intent1.putExtras(bundle);
-                context.startActivity(intent1);
-            } else {
-                showNotification(context, id, title, message);
-            }
+//            if (foregrounded()) {//foreground without lock
+//                Intent intent1 = new Intent(context, MainActivity.class);
+//                intent1.putExtras(bundle);
+//                context.startActivity(intent1);
+//            } else {
+            showNotification(context, id, title, message);
+//            }
         }
     }
 

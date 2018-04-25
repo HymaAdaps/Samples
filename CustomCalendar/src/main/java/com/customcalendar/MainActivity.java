@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
     private int currentSelMonth, currentSelYear;
     private CalendarAdapter calendarAdapter;
     private LinearLayoutManager layoutManager;
+    private List<Integer> daysList = new ArrayList<>();
     private String[] monthNameArray = {"January", "February", "March", "April", "May", "June", "July",
             "August", "September", "October", "November", "December"};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +100,14 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
+                daysList.clear();
                 setSubtitle(selDateFormat.format(dateClicked));
                 getDayEvents(dateClicked);
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
+                daysList.clear();
                 currentSelMonth = firstDayOfNewMonth.getMonth();
                 setSubtitle(selDateFormat.format(firstDayOfNewMonth));
                 requestForCalender("");
@@ -122,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
                 LinearLayoutManager layoutManager = ((LinearLayoutManager) rvEvents.getLayoutManager());
                 int lastPos = layoutManager.findLastVisibleItemPosition();
                 int comLastPos = layoutManager.findLastCompletelyVisibleItemPosition();
-                Log.e("Tag", lastPos + " , " + comLastPos);
             }
         });
         Calendar calendar = Calendar.getInstance();
@@ -212,45 +213,60 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         for (int i = 0; i < eventsList.size(); i++) {
             curDay = Integer.parseInt(eventsList.get(i).startdate.substring(eventsList.get(i).startdate.lastIndexOf("-") + 1, eventsList.get(i).startdate.length()));
             int endDay = Integer.parseInt(eventsList.get(i).enddate.substring(eventsList.get(i).enddate.lastIndexOf("-") + 1, eventsList.get(i).enddate.length()));
-            Log.e("TAg", " curDay " + curDay + " endDay " + endDay);
             if (curDay != endDay) {
                 int loopCount = endDay - curDay + 1;
                 String savEndTime = eventsList.get(i).endtime;
                 String savName = eventsList.get(i).name;
-                eventsList.get(i).type = 1;
+                if (daysList.contains(curDay)) {
+                    eventsList.get(i).type = 2;
+                } else {
+                    eventsList.get(i).type = 1;
+                    daysList.add(curDay);
+                }
                 eventsList.get(i).endtime = "";
                 eventsList.get(i).name = savName + "(day1/" + loopCount + ")";
                 tempEventList.add(eventsList.get(i));
+
                 prevDay = curDay;
                 for (int j = 1; j <= endDay - curDay; j++) {
                     SchedulerEvent schedulerEvent = new SchedulerEvent();
                     if (j < endDay - curDay) {
                         schedulerEvent.id = eventsList.get(i).id;
                         int day = curDay + j;
-                        schedulerEvent.type = 1;
+                        if (daysList.contains(day)) {
+                            schedulerEvent.type = 2;
+                        } else {
+                            schedulerEvent.type = 1;
+                            daysList.add(day);
+                        }
                         int dayCount = j + 1;
                         schedulerEvent.name = savName + "(day" + dayCount + "/" + loopCount + ")";
-                        schedulerEvent.timeInMillis = milliseconds(year + "-" + month + "-" + day);
+                        schedulerEvent.timeInMillis = milliseconds(year + "-" + month + "-" + day, eventsList.get(i).starttime);
                         schedulerEvent.imgurl = eventsList.get(i).imgurl;
                         tempEventList.add(schedulerEvent);
                     } else {//multi event is end
                         schedulerEvent.id = eventsList.get(i).id;
                         int day = curDay + j;
-                        schedulerEvent.type = 1;
+                        if (daysList.contains(day)) {
+                            schedulerEvent.type = 2;
+                        } else {
+                            schedulerEvent.type = 1;
+                            daysList.add(day);
+                        }
                         int dayCount = j + 1;
                         schedulerEvent.endtime = "Untill " + savEndTime;
                         schedulerEvent.name = savName + "(day" + dayCount + "/" + loopCount + ")";
                         schedulerEvent.imgurl = eventsList.get(i).imgurl;
-                        schedulerEvent.timeInMillis = milliseconds(year + "-" + month + "-" + day);
+                        schedulerEvent.timeInMillis = milliseconds(year + "-" + month + "-" + day, eventsList.get(i).starttime);
                         tempEventList.add(schedulerEvent);
                     }
-
                 }
             } else if (prevDay != curDay) {
-                if (prevDay != curDay) {
-                    eventsList.get(i).type = 1;
-                } else {
+                if (daysList.contains(curDay)) {
                     eventsList.get(i).type = 2;
+                } else {
+                    eventsList.get(i).type = 1;
+                    daysList.add(curDay);
                 }
                 tempEventList.add(eventsList.get(i));
                 prevDay = curDay;
@@ -377,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
                 if (event.imgurl.equals(""))
                     event.imgurl = "http://res.cloudinary.com/checkedincare/image/upload/v1504788572/scheduler/care-companion-new.png";
 
-                event.timeInMillis = milliseconds(event.startdate);
+                event.timeInMillis = milliseconds(event.startdate, event.starttime);
                 eventsList.add(event);
             }
             eventsMainList.addAll(eventsList);
@@ -388,11 +404,12 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         }
     }
 
-    public long milliseconds(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public long milliseconds(String date, String time) {
+        date = date.concat(" ").concat(time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try {
             Date mDate = sdf.parse(date);
-            long timeInMilliseconds = mDate.getTime();
+            long timeInMilliseconds = mDate.getTime() - 300000;//remove 5 minutes
             System.out.println("Date in milli :: " + timeInMilliseconds);
             return timeInMilliseconds;
         } catch (ParseException e) {
@@ -428,35 +445,18 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
             }
         }
         for (int i = 0; i < eventsMainList.size(); i++) {
-            setReminder(this, eventsMainList.get(i).starttime, eventsMainList.get(i).id, eventsMainList.get(i).name, eventsMainList.get(i).description);
+            setReminder(this, eventsMainList.get(i).timeInMillis, eventsMainList.get(i).id, eventsMainList.get(i).name, eventsMainList.get(i).description);
         }
     }
 
-    public void setReminder(Context context, String time, int id, String title, String message) {
-        String[] separated = time.split(":");
-        int hour = Integer.parseInt(separated[0]);
-        int min = Integer.parseInt(separated[1]);
-
-        Calendar calendar = Calendar.getInstance();
-        Calendar setcalendar = Calendar.getInstance();
-        setcalendar.set(Calendar.HOUR_OF_DAY, hour);
-        setcalendar.set(Calendar.MINUTE, min);
-        setcalendar.set(Calendar.SECOND, 0);
+    public void setReminder(Context context, long timeInMillis, int id, String title, String message) {
         // cancel already scheduled reminders
         cancelReminder(context, AlarmReceiver.class, id);
-
-        if (setcalendar.before(calendar))
-            setcalendar.add(Calendar.DATE, 1);
-        long timeDelay = setcalendar.getTimeInMillis() - (5 * 60 * 1000);
-//        int timeDelay = (int) (setcalendar.getTimeInMillis() - (5 * 60 * 1000));
-        Log.e("mils", timeDelay + "");
 
         // Enable a receiver
         ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
         PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
         Bundle bundle = new Bundle();
         bundle.putInt("id", id);
@@ -464,10 +464,13 @@ public class MainActivity extends AppCompatActivity implements IParserListener<J
         bundle.putString("message", message);
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtras(bundle);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setExact(AlarmManager.RTC_WAKEUP, timeDelay, pendingIntent);
+        long time = System.currentTimeMillis();
+        Log.e("TAg", " curtime " + time);
+        if (timeInMillis >= time) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            am.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+        }
     }
 
     public void cancelReminder(Context context, Class<?> cls, int id) {

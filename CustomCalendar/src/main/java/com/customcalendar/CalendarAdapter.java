@@ -85,6 +85,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 calendarVH2.tvTitle.setText(events.name);
                 calendarVH2.tvStartTime.setText(events.starttime);
                 calendarVH2.tvEndTime.setText(" - " + events.endtime);
+                calendarVH2.tvEndTime.setVisibility(!TextUtils.isEmpty(events.endtime) ? View.VISIBLE : View.GONE);
+                calendarVH2.tvStartTime.setVisibility(!TextUtils.isEmpty(events.starttime) ? View.VISIBLE : View.GONE);
 //                calendarVH2.clEvent.setBackgroundResource(R.drawable.bg_curved_event);
 //                drawable = (GradientDrawable) calendarVH2.clEvent.getBackground();
 //                rnd = new Random();
